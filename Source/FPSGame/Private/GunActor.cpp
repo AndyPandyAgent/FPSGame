@@ -67,18 +67,21 @@ void AGunActor::ActiveGunMovement(float Delta_Time) //Weapon sway and weapon bob
 	RunningTime += Delta_Time * CurrFreq;
 	float ZOffset = 0.0f;
 	float OffsetDiv = 150;
+	float MouseDiv = 1;
 
 	if (IsAiming) 
 	{
 		CurrOffsetSpeed = AimOffsetSpeed;
 		CurrAmp = AimBobAmp;
 		OffsetDiv = 600;
+		MouseDiv = 2;
 	}
 	else 
 	{
 		CurrOffsetSpeed = OffsetSpeed;
 		CurrAmp = GunBobAmp;
 		OffsetDiv = 150;
+		MouseDiv = 1;
 	}
 
 	if (Speed > 0) 
@@ -98,7 +101,9 @@ void AGunActor::ActiveGunMovement(float Delta_Time) //Weapon sway and weapon bob
 
 	CurrKickBack = FMath::Lerp(CurrKickBack, 0, 0.2f);
 
-	SetActorRelativeLocation(FVector(CurrentActivePos.X - CurrKickBack, CurrentActivePos.Y, CurrentActivePos.Z + ZOffset));
+	MouseInput /= MouseDiv;
+
+	SetActorRelativeLocation(FVector(CurrentActivePos.X - CurrKickBack , CurrentActivePos.Y + MouseInput.X, CurrentActivePos.Z - MouseInput.Y + ZOffset));
 }
 
 void AGunActor::PerformLineTrace() //The shooting trace

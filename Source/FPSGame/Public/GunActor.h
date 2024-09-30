@@ -86,6 +86,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun Lean")
 	FRotator CurrentLeanRot;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Gun Pos")
+	FVector MouseInput;
+
 
 private:
 
