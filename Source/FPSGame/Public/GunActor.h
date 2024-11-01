@@ -32,6 +32,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gun Lean")
 	void GunLean(float rot_length, float dir);
 
+	UFUNCTION(BlueprintCallable, Category = "Gun Functions")
+	UActorComponent* PerformLineTrace();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Properties")
+	UActorComponent* HitEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Properties")
+	float Damage = 10.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	bool CanHoldShoot = false;
 
@@ -91,9 +100,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float Range = 10000.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Gun Settings")
-	float Damage = 10.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float TimeBetweensShots = 0.1f;
@@ -173,8 +179,6 @@ private:
 
 
 
-
-	void PerformLineTrace();
 
 	void Recoil();
 

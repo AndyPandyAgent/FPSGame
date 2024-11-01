@@ -40,7 +40,7 @@ void AGunActor::Shoot()
 	{
 		for (int i = 0; i < BulletsPerShot && BulletsLeft > 0; ++i)
 		{
-			PerformLineTrace();
+			HitEnemy = PerformLineTrace();
 			Recoil();
 
 			BulletsShot += 1;
@@ -101,7 +101,7 @@ void AGunActor::ActiveGunMovement(float Delta_Time) //Weapon sway and weapon bob
 	SetActorRelativeLocation(FVector(CurrentActivePos.X - CurrKickBack, CurrentActivePos.Y, CurrentActivePos.Z + ZOffset));
 }
 
-void AGunActor::PerformLineTrace() //The shooting trace
+UActorComponent* AGunActor::PerformLineTrace() //The shooting trace
 {
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
@@ -114,7 +114,17 @@ void AGunActor::PerformLineTrace() //The shooting trace
 	spread = spread +  0.01f;
 	spread = FMath::Clamp(spread, 0, 0.06);
 
-	FVector Start = AttackPos;
+	FVector Start = PlayerViewPointLocation;
+
+	if (!IsAiming) 
+	{
+		Start = PlayerViewPointLocation + FVector(0, 40, 35);
+	}
+	else 
+	{
+		Start = PlayerViewPointLocation + FVector(0, 0, 25);
+	}
+
 	FVector End = Start + ((PlayerViewPointRotation.Vector() + FVector(0, x, y)) * Range);
 
 	FHitResult HitResult;
@@ -125,16 +135,17 @@ void AGunActor::PerformLineTrace() //The shooting trace
 
 	if (bHit) 
 	{
-		AActor* HitActor = HitResult.GetActor();
+		UActorComponent* HitActor = HitResult.GetComponent();
 		if (HitActor) 
 		{
-			//Deal damage here
 			UE_LOG(LogTemp, Warning, TEXT("Bang!"));
+			//DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Green, false, 2.0f, 0, 2.0f);
+			return HitActor;
 		}
-		DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Red, false, 2.0f, 0, 2.0f);
+		//DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Red, false, 2.0f, 0, 2.0f);
 	}
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 2.0f);
-
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 2.0f);
+	return nullptr;
 }
 
 void AGunActor::Recoil() //Recoil, lol
