@@ -74,6 +74,12 @@ void AGunActor::ActiveGunMovement(float Delta_Time) //Weapon sway and weapon bob
 		CurrAmp = AimBobAmp;
 		OffsetDiv = 600;
 	}
+	else if (IsCrouching) 
+	{
+		CurrOffsetSpeed = AimOffsetSpeed;
+		CurrAmp = AimBobAmp;
+		OffsetDiv = 600;
+	}
 	else 
 	{
 		CurrOffsetSpeed = OffsetSpeed;

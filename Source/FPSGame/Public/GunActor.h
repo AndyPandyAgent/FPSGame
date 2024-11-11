@@ -48,6 +48,9 @@ public:
 	bool IsAiming = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
+	bool IsCrouching = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	bool Reloading = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
@@ -55,6 +58,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	float MagSize = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
+	float BulletsLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	float spread = 1.0f;
@@ -109,9 +115,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float BulletsPerShot = 1.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Gun Settings")
-	float BulletsLeft;
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float ReloadTime;
