@@ -32,11 +32,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gun Lean")
 	void GunLean(float rot_length, float dir);
 
+	UFUNCTION(BlueprintCallable, Category = "Gun Functions")
+	UActorComponent* PerformLineTrace();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Properties")
+	UActorComponent* HitEnemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Properties")
+	float Damage = 10.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	bool CanHoldShoot = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	bool IsAiming = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
+	bool IsCrouching = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	bool Reloading = false;
@@ -46,6 +58,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	float MagSize = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
+	float BulletsLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gun Settings")
 	float spread = 1.0f;
@@ -93,9 +108,6 @@ private:
 	float Range = 10000.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
-	float Damage = 10.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float TimeBetweensShots = 0.1f;
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
@@ -103,9 +115,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float BulletsPerShot = 1.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Gun Settings")
-	float BulletsLeft;
 
 	UPROPERTY(EditAnywhere, Category = "Gun Settings")
 	float ReloadTime;
@@ -173,8 +182,6 @@ private:
 
 
 
-
-	void PerformLineTrace();
 
 	void Recoil();
 
