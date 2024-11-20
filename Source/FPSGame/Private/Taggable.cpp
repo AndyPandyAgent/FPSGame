@@ -19,8 +19,7 @@ void UTaggable::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	MeshComponent = Cast<UMeshComponent>(GetOwner()->GetComponentByClass(UMeshComponent::StaticClass()));
 }
 
 
@@ -31,7 +30,34 @@ void UTaggable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (Tagged) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Tagged"));
+		MeshComponent->bRenderCustomDepth = true;
 	}
+}
+
+void UTaggable::ChangeMat()
+{
+	if (!Tagged)
+	{
+		for (int32 i = 0; i < 6; i++) {
+			MeshComponent->bRenderCustomDepth = true;
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Mat"));
+		Tagged = true;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTaggable::ChangeMat, 25.0f, false);
+		GetOwner()->SetActorHiddenInGame(true);
+		GetOwner()->SetActorHiddenInGame(false);
+
+
+	}
+	else
+	{
+		MeshComponent->bRenderCustomDepth = false;
+		UE_LOG(LogTemp, Warning, TEXT("NoMat"));
+		Tagged = false;
+
+	}
+
+
 }
 

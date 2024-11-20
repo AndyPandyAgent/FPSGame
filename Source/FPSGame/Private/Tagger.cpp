@@ -38,7 +38,6 @@ void UTagger::AddTag(UTaggable* Tag)
 
 void UTagger::RemoveTag(UTaggable* Tag) 
 {
-	Tag->Tagged = false;
 	Taggables.Remove(Tag);
 }
 
@@ -81,7 +80,12 @@ void UTagger::TagEnemy(float Range)
 
 			UTaggable* Taggable = Cast<UTaggable>(HitResult.GetActor()->GetComponentByClass(UTaggable::StaticClass()));
 
-			AddTag(Taggable);
+			if (!Taggable->Tagged) 
+			{
+				Taggable->ChangeMat();
+
+				AddTag(Taggable);
+			}
 		}
 	}
 
