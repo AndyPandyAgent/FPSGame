@@ -64,7 +64,6 @@ void UCustomCameraComponent::Lean(float dir, float delta_time, float lean_lenght
 	float Value = 2000 * dir;
 
 	SetRelativeLocation(FMath::Lerp(GetRelativeLocation(), FVector(0, lean_lenght * dir, lean_height), 0.1));
-	UE_LOG(LogTemp, Warning, TEXT("Value: %f"), Value);
 
 	LeanRot = FRotator( FQuat::Slerp(GetRelativeRotation().Quaternion(), (FRotator(0, 0, rot_length * dir)).Quaternion(), 0.2) );
 }

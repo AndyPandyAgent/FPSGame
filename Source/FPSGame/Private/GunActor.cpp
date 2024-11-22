@@ -196,7 +196,5 @@ void AGunActor::GunLean(float rot_length, float dir)
 
 	LeanRot == FRotator(0, rot_length * dir, 0);
 
-	UE_LOG(LogTemp, Log, TEXT("Rotation: Pitch = %f, Yaw = %f, Roll = %f"), CurrentLeanRot.Pitch, CurrentLeanRot.Yaw, CurrentLeanRot.Roll);
-
 
 }
