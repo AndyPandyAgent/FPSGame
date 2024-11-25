@@ -38,24 +38,17 @@ void UTaggable::ChangeMat()
 {
 	if (!Tagged)
 	{
-		for (int32 i = 0; i < 6; i++) {
-			MeshComponent->bRenderCustomDepth = true;
-		}
+		MeshComponent->bRenderCustomDepth = true;
 
-		UE_LOG(LogTemp, Warning, TEXT("Mat"));
 		Tagged = true;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTaggable::ChangeMat, 25.0f, false);
 		GetOwner()->SetActorHiddenInGame(true);
 		GetOwner()->SetActorHiddenInGame(false);
-
-
 	}
 	else
 	{
 		MeshComponent->bRenderCustomDepth = false;
-		UE_LOG(LogTemp, Warning, TEXT("NoMat"));
 		Tagged = false;
-
 	}
 
 
