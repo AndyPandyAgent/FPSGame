@@ -2,6 +2,7 @@
 
 
 #include "Tagger.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values for this component's properties
 UTagger::UTagger()
@@ -43,41 +44,41 @@ void UTagger::RemoveTag(UTaggable* Tag)
 
 void UTagger::SetTags() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("Started thing"));
-
 	for (int32 i = 0; i < Taggables.Num(); i++)
 	{
 		UTaggable* TaggedIndexer = Taggables[i];
 		TaggedIndexer->Tagged = true;
-		UE_LOG(LogTemp, Warning, TEXT("Did thing"));
 	}
 }
 
 void UTagger::TagEnemy(float Range) 
 {
-
-
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+
+	const FQuat ShapeRotation = PlayerViewPointRotation.Quaternion();
 
 	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * Range);
 
 	FHitResult HitResult;
 
-	GetWorld()->LineTraceSingleByChannel(HitResult, PlayerViewPointLocation, LineTraceEnd, ECC_Visibility);
+	//GetWorld()->LineTraceSingleByChannel(HitResult, PlayerViewPointLocation, LineTraceEnd, ECC_Visibility);
 
-	DrawDebugLine(GetWorld(), PlayerViewPointLocation, HitResult.Location, FColor::Green, false, 2.0f, 0, 2.0f);
+	//Start to a capsue collision for better tag precision
+	FCollisionShape Shape = FCollisionShape::MakeBox(FVector(5000, 50, 50));
 
+	GetWorld()->SweepMultiByChannel(HitResult, PlayerViewPointLocation, LineTraceEnd, ShapeRotation, ECC_Visibility, Shape);
+
+	//DrawDebugLine(GetWorld(), PlayerViewPointLocation, HitResult.Location, FColor::Green, false, 2.0f, 0, 2.0f);
+
+	DrawDebugBox(GetWorld(), HitResult.ImpactPoint, FVector(5000, 50, 50), ShapeRotation, FColor::Red, false, 2.0f);
+	
 
 	if (HitResult.GetActor()) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GotActor"));
-
 		if (HitResult.GetActor()->ActorHasTag("Enemy"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("IsEnemy"));
-
 			UTaggable* Taggable = Cast<UTaggable>(HitResult.GetActor()->GetComponentByClass(UTaggable::StaticClass()));
 
 			if (!Taggable->Tagged) 
@@ -88,5 +89,4 @@ void UTagger::TagEnemy(float Range)
 			}
 		}
 	}
-
 }
