@@ -36,7 +36,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable)
-	void TagEnemy(float Range);
+	void TagEnemy(FVector BoxSize);
 
 
 		

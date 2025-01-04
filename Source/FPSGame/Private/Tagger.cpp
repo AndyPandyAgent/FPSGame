@@ -51,7 +51,7 @@ void UTagger::SetTags()
 	}
 }
 
-void UTagger::TagEnemy(float Range) 
+void UTagger::TagEnemy(FVector BoxSize) 
 {
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
@@ -59,33 +59,31 @@ void UTagger::TagEnemy(float Range)
 
 	const FQuat ShapeRotation = PlayerViewPointRotation.Quaternion();
 
-	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * Range);
+	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * BoxSize.X/2);
 
 	FHitResult HitResult;
 
-	//GetWorld()->LineTraceSingleByChannel(HitResult, PlayerViewPointLocation, LineTraceEnd, ECC_Visibility);
+	TArray<FHitResult> SweepResult;
 
-	//Start to a capsue collision for better tag precision
-	FCollisionShape Shape = FCollisionShape::MakeBox(FVector(5000, 50, 50));
+	FCollisionShape Shape = FCollisionShape::MakeBox(FVector(BoxSize.X, BoxSize.Y, BoxSize.Z));
 
-	GetWorld()->SweepMultiByChannel(HitResult, PlayerViewPointLocation, LineTraceEnd, ShapeRotation, ECC_Visibility, Shape);
+	GetWorld()->SweepMultiByChannel(SweepResult, PlayerViewPointLocation, LineTraceEnd, ShapeRotation, ECC_Visibility, Shape);
 
-	//DrawDebugLine(GetWorld(), PlayerViewPointLocation, HitResult.Location, FColor::Green, false, 2.0f, 0, 2.0f);
-
-	DrawDebugBox(GetWorld(), HitResult.ImpactPoint, FVector(5000, 50, 50), ShapeRotation, FColor::Red, false, 2.0f);
 	
-
-	if (HitResult.GetActor()) 
+	for (int32 i = 0; i < SweepResult.Num(); i++)
 	{
-		if (HitResult.GetActor()->ActorHasTag("Enemy"))
+		if (SweepResult[i].GetActor())
 		{
-			UTaggable* Taggable = Cast<UTaggable>(HitResult.GetActor()->GetComponentByClass(UTaggable::StaticClass()));
-
-			if (!Taggable->Tagged) 
+			if (SweepResult[i].GetActor()->ActorHasTag("Enemy"))
 			{
-				Taggable->ChangeMat();
+				UTaggable* Taggable = Cast<UTaggable>(SweepResult[i].GetActor()->GetComponentByClass(UTaggable::StaticClass()));
 
-				AddTag(Taggable);
+				if (!Taggable->Tagged)
+				{
+					Taggable->ChangeMat();
+
+					AddTag(Taggable);
+				}
 			}
 		}
 	}
